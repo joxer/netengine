@@ -33,7 +33,15 @@ def _extract(ifconfig_output):
  
 
 def ifconfig_to_python(ifconfig):
-    interfaces = [ _extract(interface) for interface in ifconfig.split('\n\n') if interface.strip() ]
+    interfaces = [ ]
+    
+    for interface in ifconfig.split('\n\n'):
+        if interface.strip():
+            mo = re.search(
+                r'^(?P<interface>\w+|\w+:\d+)\s+',
+                interface, re.MULTILINE|re.IGNORECASE)
+            interfaces.append({mo.groupdict('')['interface']: _extract(interface)})
+
     return interfaces
 
 
