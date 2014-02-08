@@ -2,7 +2,7 @@ import json
 import unittest
 
 from netengine.backends.ssh import *
-from netengine.exceptions import NetEngineError
+from netengine.exceptions import *
 
 from .settings import settings
 
@@ -69,7 +69,6 @@ class TestSSH(unittest.TestCase):
     
     def test_get_interface_mtu(self):
         interfaces = self.device.get_interfaces()
-        
         # ensure MTU for first 2 interfaces is not empty
         self.assertNotEqual(interfaces[0]['mtu'], '')
         self.assertNotEqual(interfaces[1]['mtu'], '')

@@ -12,18 +12,20 @@ class SSH(BaseBackend):
     SSH base backend
     """
     
-    def __init__(self, host, username, password, port=22):
+    def __init__(self, host, username, password, port=22, pkey=None):
         """
         :host string: required
         :username string: required
         :password string: required
         :port integer: defaults to 22
+        :pkey string: required
         """
         self.host = host
         self.username = username
         self.password = password
         self.port = port
         self.shell = None
+        self.pkey = pkey
     
     def __str__(self):
         """ print a human readable object description """
@@ -64,7 +66,9 @@ class SSH(BaseBackend):
             self.host,
             username=self.username,
             password=self.password,
-            port=self.port
+            port=self.port,
+            pkey=None,
+            compress=True
         )
         self.shell = shell
     

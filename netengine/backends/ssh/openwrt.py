@@ -6,7 +6,7 @@ __all__ = ['OpenWRT']
 
 
 from netengine.backends.ssh import SSH
-
+from netengine.exceptions import *
 
 class OpenWRT(SSH):
     """
@@ -33,7 +33,12 @@ class OpenWRT(SSH):
         
         # loop over lines of output
         # parse output and store in python dict
+
+        if output.find("No such file or directory") != -1:
+            raise SSHNetEngineError("file not found",self)
+        
         for line in output.split('\n'):
+            
             # tidy up before filling the dictionary
             key, value = line.split('=')
             key = key.replace('DISTRIB_', '').lower()
@@ -83,3 +88,6 @@ class OpenWRT(SSH):
     def RAM_total(self):
         return int(self.run("cat /proc/meminfo | grep MemTotal | awk '{print $2}'"))
 
+    def wireless_channel_width(self):
+        """ retrieve wireless channel width """
+        return int(self.run("iw dev wlan1 link | grep -Eo '([0-9][0-9]Mhz)')"))
